@@ -26,7 +26,8 @@ and open the template in the editor.
              <input type="email" name="email" placeholder="noko.mathapo@gmail.com"><br><br>
             <label>Degree Description</label>
              <input type="text" name="degree" placeholder="National Diploma in Computer Science"><br><br>
-            <input type="submit" name="Register" value="Request">
+            <input type="submit" name="Request" value="Register">
+            <input type="submit" name="Request" value="View List" style="background-color: #007BFF;">
         </form>
     </body>
 </html>

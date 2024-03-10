@@ -7,6 +7,7 @@ package za.ac.tut.Servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,7 +38,12 @@ public class MainServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        
+        //Select a button
+        String SelectButton = request.getParameter("Request");
+        //call output method
+        PrintWriter out = response.getWriter();
+        
         //Get the data from a database
         String studentNo = request.getParameter("studenno");
         long studenno = Long.parseLong(studentNo); //convert to long
@@ -48,30 +54,57 @@ public class MainServlet extends HttpServlet {
         String email = request.getParameter("email");
         String degree = request.getParameter("degree");
         
-        //Creat the values to the database
-        //Instatiate the student object
-        Student objStudent = new Student();
-        objStudent.setStudenno(studenno);
-        objStudent.setFirstname(firstName);
-        objStudent.setLastname(lastName);
-        objStudent.setContactno(contactNo);
-        objStudent.setEmail(email);
-        objStudent.setDegree(degree);
         
-        studentFacade.create(objStudent); //Send the values to the database
+        //which button is selected
+        if (SelectButton.equalsIgnoreCase("Register"))
+        {
+            //Instatiate the student object
+            Student objStudent = new Student();
+            //Create a values to the database
+            objStudent.setStudenno(studenno);
+            objStudent.setFirstname(firstName);
+            objStudent.setLastname(lastName);
+            objStudent.setContactno(contactNo);
+            objStudent.setEmail(email);
+            objStudent.setDegree(degree);
 
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+            studentFacade.create(objStudent); //Send the input data to the database
+            out.println("<h1>Sudent successfully registered</h1>");
+        }else if (SelectButton.equalsIgnoreCase("View List"))
+        {
+            //find the records and display   
+            //fubd al froom database
+            List<Student> StudentList = studentFacade.findAll();
+            
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Servlet MainServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Sudent successfully registered</h1>");
+            out.println("<h1>Display Records</h1>");
+            for(Student student : StudentList)
+            {
+                out.println("<br />");
+                out.println(student.getStudenno());
+                out.println("<br />");
+            }
             out.println("</body>");
             out.println("</html>");
         }
+        
+//        try (PrintWriter out = response.getWriter()) {
+//            /* TODO output your page here. You may use following sample code. */
+//            out.println("<!DOCTYPE html>");
+//            out.println("<html>");
+//            out.println("<head>");
+//            out.println("<title>Servlet MainServlet</title>");
+//            out.println("</head>");
+//            out.println("<body>");
+//            out.println("<h1>Sudent successfully registered</h1>");
+//            out.println("</body>");
+//            out.println("</html>");
+//        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
